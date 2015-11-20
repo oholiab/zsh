@@ -9,6 +9,7 @@ bindkey "^?" describe-key-briefly
 bindkey "^r" history-incremental-search-backward
 bindkey -M vicmd "/" history-incremental-search-backward
 autoload -U colors && colors
+alias zource='source ~/.zshrc'
 
 HISTSIZE=1000
 SAVEHIST=1000
@@ -47,7 +48,16 @@ function zle-line-init zle-keymap-select {
 }
 
 setopt PROMPT_SUBST
-export THE_PROMPT="%n@%m/%l:%~ \$(__gitprompt)"
+case $OS in 
+  Darwin)
+    prompt_pref="%n@%l"
+    ;;
+  *)
+    prompt_pref="%n@%m/%l"
+    ;;
+esac
+
+export THE_PROMPT="${prompt_pref}:%~ \$(__gitprompt)"
 
 zle -N zle-line-init
 zle -N zle-keymap-select
