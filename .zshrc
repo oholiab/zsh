@@ -52,14 +52,38 @@ export THE_PROMPT="%n@%l:%~ \$(__gitprompt)"
 zle -N zle-line-init
 zle -N zle-keymap-select
 
-if [ "$OS" = "Darwin" ] && which docker-machine > /dev/null 2>&1; then
-  __docker_machine_name=default
-  __docker_machine_status=$(docker-machine status ${__docker_machine_name} 2>&1)
-  if [ $? -ne 0 ]; then
-    docker-machine create ${__docker_machine_name} -d virtualbox
-  fi
-  if [ ${__docker_machine_status} = "Stopped" ]; then
-    docker-machine start ${__docker_machine_name}
-  fi
-  eval $(docker-machine env ${__docker_machine_name})
-fi
+function flippo {
+  # Make it portable
+  case $OS in 
+    FreeBSD|Linux|Darwin)
+      local delay=0.5
+      ;;
+    *)
+      local delay=1
+      ;;
+  esac
+  local reset="\r\e[K"
+  local frames=( \
+    '(ヽ°-°)ヽ┳━┳     ' \
+    '(╯ °□°）╯︵ ┻━┻  ' \
+    'ﾉ(°-°ﾉ)     ┻━┻  ' \
+    '-°ﾉ)        ┻━┻  ' \
+    '            ┻━┻  ')
+  for i in ${frames[@]}; do
+    echo -en $reset
+    echo -n $i
+    sleep $delay
+  done
+  echo
+}
+#if [ "$OS" = "Darwin" ] && which docker-machine > /dev/null 2>&1; then
+#  __docker_machine_name=default
+#  __docker_machine_status=$(docker-machine status ${__docker_machine_name} 2>&1)
+#  if [ $? -ne 0 ]; then
+#    docker-machine create ${__docker_machine_name} -d virtualbox
+#  fi
+#  if [ ${__docker_machine_status} = "Stopped" ]; then
+#    docker-machine start ${__docker_machine_name}
+#  fi
+#  eval $(docker-machine env ${__docker_machine_name})
+#fi
