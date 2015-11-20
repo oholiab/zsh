@@ -31,7 +31,7 @@ function __gitprompt {
     echo -n "$__gitprompt_prefix"
     [ "$branch" = "HEAD" ] && echo -n $revision || echo -n $branch
     [ $unstaged -ne 0 ] && echo -ne " %F{red}%}${unstaged##* }%{$reset_color%}"
-    [ $staged -ne 0 ] && echo -ne " %F{green}%}${unstaged##* }%{$reset_color%}"
+    [ $staged -ne 0 ] && echo -ne " %F{green}%}${staged##* }%{$reset_color%}"
     echo "$__gitprompt_suffix"
   elif [ -d .git ]; then
     echo -e "${__gitprompt_prefix}${_RED}new repo${_RST}${__gitprompt_suffix}"
