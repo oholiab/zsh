@@ -2,6 +2,7 @@ export OS=$(uname)
 
 export PATH=$PATH:/usr/local/sbin
 export EDITOR=vim
+alias vi='vim'
 export KEYTIMEOUT=1
 set -o vi
 bindkey -v
