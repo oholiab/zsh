@@ -47,7 +47,7 @@ function zle-line-init zle-keymap-select {
 }
 
 setopt PROMPT_SUBST
-export THE_PROMPT="%n@%l:%~ \$(__gitprompt)"
+export THE_PROMPT="%n@%m/%l:%~ \$(__gitprompt)"
 
 zle -N zle-line-init
 zle -N zle-keymap-select
