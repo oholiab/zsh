@@ -6,7 +6,7 @@ alias vi='vim'
 export KEYTIMEOUT=1
 set -o vi
 bindkey -v
-bindkey "^?" describe-key-briefly
+#bindkey "^?" describe-key-briefly
 bindkey "^r" history-incremental-search-backward
 bindkey -M vicmd "/" history-incremental-search-backward
 autoload -U colors && colors
