@@ -6,11 +6,17 @@ alias vi='vim'
 export KEYTIMEOUT=1
 set -o vi
 bindkey -v
-bindkey "^?" describe-key-briefly
+#bindkey "^?" describe-key-briefly
 bindkey "^r" history-incremental-search-backward
 bindkey -M vicmd "/" history-incremental-search-backward
 autoload -U colors && colors
 alias zource='source ~/.zshrc'
+
+case $OS in
+  FreeBSD)
+    alias make='gmake'
+    ;;
+esac
 
 HISTSIZE=1000
 SAVEHIST=1000
@@ -28,7 +34,7 @@ function __gitprompt {
   if git show-ref --head > /dev/null 2>&1; then
     branch=$(git rev-parse --abbrev-ref HEAD)
     revision=$(git rev-parse --short HEAD)
-    unstaged=$(git ls-files -om | wc -l)
+    unstaged=$(git ls-files -om --exclude-standard | wc -l)
     staged=$(git diff --name-only --cached | wc -l)
     echo -n "$__gitprompt_prefix"
     [ "$branch" = "HEAD" ] && echo -n $revision || echo -n $branch
