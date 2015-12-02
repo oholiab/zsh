@@ -90,6 +90,25 @@ function flippo {
   done
   echo
 }
+
+function dockme {
+  local distro=$1
+  local docker_image=""
+  local shell="/bin/bash"
+  case $distro in
+    void)
+      docker_image="voidlinux/voidlinux"
+      ;;
+    ubuntu)
+      docker_image="ubuntu:trusty"
+      ;;
+    alpine)
+      docker_image="alpine:latest"
+      shell="/bin/ash"
+      ;;
+  esac
+  docker run --rm -it $docker_image $shell
+} 
 #if [ "$OS" = "Darwin" ] && which docker-machine > /dev/null 2>&1; then
 #  __docker_machine_name=default
 #  __docker_machine_status=$(docker-machine status ${__docker_machine_name} 2>&1)
