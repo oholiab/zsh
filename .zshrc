@@ -5,6 +5,9 @@ export EDITOR=vim
 export PAGER=less
 export GPG_TTY=$(tty)
 export GPG_AGENT_INFO=$HOME/.gnupg/S.gpg-agent
+export GOPATH=$HOME/golang
+export GOBIN=$GOPATH/bin
+export PATH=$PATH:$GOBIN
 alias vi='vim'
 export KEYTIMEOUT=1
 set -o vi
