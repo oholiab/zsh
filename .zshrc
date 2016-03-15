@@ -1,13 +1,14 @@
 export OS=$(uname)
 
-export PATH=$PATH:/usr/local/sbin:$HOME/bin/mail:$HOME/.local/bin
+export PATH=$PATH:/usr/local/sbin:$HOME/bin:$HOME/bin/mail:$HOME/.local/bin
 export EDITOR=vim
 export PAGER=less
 export GPG_TTY=$(tty)
 export GPG_AGENT_INFO=$HOME/.gnupg/S.gpg-agent
 export GOPATH=$HOME/golang
 export GOBIN=$GOPATH/bin
-export PATH=$PATH:$GOBIN
+export RUSTBIN=~/.cargo/bin
+export PATH=$PATH:$GOBIN:$RUSTBIN
 alias vi='vim'
 export KEYTIMEOUT=1
 set -o vi
@@ -61,7 +62,7 @@ function zle-line-init zle-keymap-select {
 }
 
 setopt PROMPT_SUBST
-case $OS in 
+case $OS in
   Darwin)
     prompt_pref="%n@%l"
     ;;
@@ -77,7 +78,7 @@ zle -N zle-keymap-select
 
 function flippo {
   # Make it portable
-  case $OS in 
+  case $OS in
     FreeBSD|Linux|Darwin)
       local delay=0.5
       ;;
@@ -92,6 +93,33 @@ function flippo {
     'ﾉ(°-°ﾉ)     ┻━┻  ' \
     '-°ﾉ)        ┻━┻  ' \
     '            ┻━┻  ')
+  for i in ${frames[@]}; do
+    echo -en $reset
+    echo -n $i
+    sleep $delay
+  done
+  echo
+}
+
+#FIXME: dry
+function ohyeah {
+  # Make it portable
+  case $OS in
+    FreeBSD|Linux|Darwin)
+      local delay=0.5
+      ;;
+    *)
+      local delay=1
+      ;;
+  esac
+  local reset="\r\e[K"
+  local frames=( \
+    '( •_•)        ' \
+    '( •_•)        ' \
+    '( •_•)>⌐■-■   ' \
+    '( •_•⌐■-■     ' \
+    '(⌐■_■)        ' \
+    '(⌐■_■) -ohyeah')
   for i in ${frames[@]}; do
     echo -en $reset
     echo -n $i
@@ -117,7 +145,7 @@ function dockme {
       ;;
   esac
   docker run --rm -it $docker_image $shell
-} 
+}
 #if [ "$OS" = "Darwin" ] && which docker-machine > /dev/null 2>&1; then
 #  __docker_machine_name=default
 #  __docker_machine_status=$(docker-machine status ${__docker_machine_name} 2>&1)
