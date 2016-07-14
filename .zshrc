@@ -1,6 +1,6 @@
 export OS=$(uname)
 
-export PATH=$PATH:/usr/local/sbin:$HOME/bin:$HOME/bin/mail:$HOME/.local/bin
+export PATH=$PATH:/usr/local/sbin:$HOME/bin:$HOME/bin/mail:$HOME/.local/bin:$HOME/.gem/ruby/2.0.0/bin
 export EDITOR=vim
 export PAGER=less
 export GPG_TTY=$(tty)
@@ -53,8 +53,14 @@ function __gitprompt {
   fi
 }
 
-__ins_prompt="%F{yellow}> %{$reset_color%}"
-__cmd_prompt="%F{yellow}: %{$reset_color%}"
+if [ -z $SSH_CLIENT ]; then
+  PCOL=yellow
+else
+  PCOL=red
+fi
+
+__ins_prompt="%F{$PCOL}> %{$reset_color%}"
+__cmd_prompt="%F{$PCOL}: %{$reset_color%}"
 
 function zle-line-init zle-keymap-select {
   PROMPT="$THE_PROMPT${${KEYMAP/vicmd/$__cmd_prompt}/(main|viins)/$__ins_prompt}"
