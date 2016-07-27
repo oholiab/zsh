@@ -26,4 +26,4 @@ completions/git-completion.bash: tmp completions
 	mv tmp/$(NAME) ./completions/
 
 ../.zshrc:
-	ln -s .zshrc ../.zshrc
+	cd ../ && ln -s .zsh/.zshrc
