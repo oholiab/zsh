@@ -1,3 +1,5 @@
+fpath=(~/.zsh/completions $fpath)
+autoload -Uz compinit && compinit
 export OS=$(uname)
 
 export PATH=$PATH:/usr/local/sbin:$HOME/bin:$HOME/bin/mail:$HOME/.local/bin:$HOME/.gem/ruby/2.0.0/bin
