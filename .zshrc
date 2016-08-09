@@ -81,7 +81,11 @@ case $OS in
     ;;
 esac
 
-export THE_PROMPT="${prompt_pref}:%~ \$(__gitprompt)%{$reset_color%}"
+function venvprompt {
+  [ -z $VIRTUAL_ENV ] || echo "[$(basename "$VIRTUAL_ENV")]"
+}
+
+export THE_PROMPT="\$(venvprompt)${prompt_pref}:%~ \$(__gitprompt)%{$reset_color%}"
 
 zle -N zle-line-init
 zle -N zle-keymap-select
