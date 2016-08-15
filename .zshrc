@@ -27,6 +27,9 @@ case $OS in
   FreeBSD)
     alias make='gmake'
     ;;
+  Darwin)
+    alias ls='ls -G'
+    ;;
 esac
 
 HISTSIZE=1000
