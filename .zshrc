@@ -181,6 +181,13 @@ function dockill {
     docker kill $i
   done
 }
+
+function vidiff {
+  args=
+  [ "$1" = "--cached" ] && args="$1"
+  vi $(git diff $args --name-only)
+}
+
 #if [ "$OS" = "Darwin" ] && which docker-machine > /dev/null 2>&1; then
 #  __docker_machine_name=default
 #  __docker_machine_status=$(docker-machine status ${__docker_machine_name} 2>&1)
