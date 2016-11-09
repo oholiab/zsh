@@ -175,6 +175,12 @@ function dockme {
   esac
   docker run --rm -it $docker_image $shell
 }
+
+function dockill {
+  for i in $(docker ps -q); do
+    docker kill $i
+  done
+}
 #if [ "$OS" = "Darwin" ] && which docker-machine > /dev/null 2>&1; then
 #  __docker_machine_name=default
 #  __docker_machine_status=$(docker-machine status ${__docker_machine_name} 2>&1)
