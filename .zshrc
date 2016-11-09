@@ -1,3 +1,5 @@
+fpath=(~/.zsh/completions $fpath)
+autoload -Uz compinit && compinit
 export OS=$(uname)
 
 export PATH=$PATH:/usr/local/sbin:$HOME/bin:$HOME/bin/mail:$HOME/.local/bin:$HOME/.gem/ruby/2.0.0/bin
@@ -25,7 +27,22 @@ case $OS in
   FreeBSD)
     alias make='gmake'
     ;;
+  Darwin)
+    alias ls='ls -G'
+    ;;
 esac
+
+man() {
+  env \
+    LESS_TERMCAP_mb=$(printf "\e[1;31m") \
+    LESS_TERMCAP_md=$(printf "\e[1;31m") \
+    LESS_TERMCAP_me=$(printf "\e[0m") \
+    LESS_TERMCAP_se=$(printf "\e[0m") \
+    LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
+    LESS_TERMCAP_ue=$(printf "\e[0m") \
+    LESS_TERMCAP_us=$(printf "\e[1;32m") \
+    man "$@"
+}
 
 HISTSIZE=1000
 SAVEHIST=1000
@@ -79,7 +96,11 @@ case $OS in
     ;;
 esac
 
-export THE_PROMPT="${prompt_pref}:%~ \$(__gitprompt)%{$reset_color%}"
+function venvprompt {
+  [ -z $VIRTUAL_ENV ] || echo "[$(basename "$VIRTUAL_ENV")]"
+}
+
+export THE_PROMPT="\$(venvprompt)${prompt_pref}:%~ \$(__gitprompt)%{$reset_color%}"
 
 zle -N zle-line-init
 zle -N zle-keymap-select
