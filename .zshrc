@@ -183,9 +183,7 @@ function dockill {
 }
 
 function vidiff {
-  args=
-  [ "$1" = "--cached" ] && args="$1"
-  vi $(git diff $args --name-only)
+  vi $(git diff $@ --name-only)
 }
 
 #if [ "$OS" = "Darwin" ] && which docker-machine > /dev/null 2>&1; then
