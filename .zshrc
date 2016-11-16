@@ -1,10 +1,16 @@
+fpath=(~/.zsh/completions $fpath)
+autoload -Uz compinit && compinit
 export OS=$(uname)
 
-export PATH=$HOME/bin:$PATH:/usr/local/sbin:$HOME/bin/mail:$HOME/.local/bin:$HOME/.cargo/bin
+export PATH=$HOME/bin:$PATH:/usr/local/sbin:$HOME/bin/mail:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.gem/ruby/2.0.0/bin
 export EDITOR=vim
 export PAGER=less
 export GPG_TTY=$(tty)
 export GPG_AGENT_INFO=$HOME/.gnupg/S.gpg-agent
+export GOPATH=$HOME/golang
+export GOBIN=$GOPATH/bin
+export RUSTBIN=~/.cargo/bin
+export PATH=$PATH:$GOBIN:$RUSTBIN
 alias vi='vim'
 export KEYTIMEOUT=1
 set -o vi
@@ -14,10 +20,15 @@ bindkey "^r" history-incremental-search-backward
 bindkey -M vicmd "/" history-incremental-search-backward
 autoload -U colors && colors
 alias zource='source ~/.zshrc'
+# what the fuck ansible.
+export ANSIBLE_NOCOWS=1
 
 case $OS in
   FreeBSD)
     alias make='gmake'
+    ;;
+  Darwin)
+    alias ls='ls -G'
     ;;
 esac
 
@@ -26,6 +37,18 @@ case $TERM in
     export TERM=xterm-256color
     ;;
 esac
+
+man() {
+  env \
+    LESS_TERMCAP_mb=$(printf "\e[1;31m") \
+    LESS_TERMCAP_md=$(printf "\e[1;31m") \
+    LESS_TERMCAP_me=$(printf "\e[0m") \
+    LESS_TERMCAP_se=$(printf "\e[0m") \
+    LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
+    LESS_TERMCAP_ue=$(printf "\e[0m") \
+    LESS_TERMCAP_us=$(printf "\e[1;32m") \
+    man "$@"
+}
 
 HISTSIZE=1000
 SAVEHIST=1000
@@ -55,8 +78,14 @@ function __gitprompt {
   fi
 }
 
-__ins_prompt="%F{yellow}> %{$reset_color%}"
-__cmd_prompt="%F{yellow}: %{$reset_color%}"
+if [ -z $SSH_CLIENT ]; then
+  PCOL=yellow
+else
+  PCOL=red
+fi
+
+__ins_prompt="%F{$PCOL}> %{$reset_color%}"
+__cmd_prompt="%F{$PCOL}: %{$reset_color%}"
 
 function zle-line-init zle-keymap-select {
   PROMPT="$THE_PROMPT${${KEYMAP/vicmd/$__cmd_prompt}/(main|viins)/$__ins_prompt}"
@@ -64,7 +93,7 @@ function zle-line-init zle-keymap-select {
 }
 
 setopt PROMPT_SUBST
-case $OS in 
+case $OS in
   Darwin)
     prompt_pref="%n@%l"
     ;;
@@ -73,14 +102,18 @@ case $OS in
     ;;
 esac
 
-export THE_PROMPT="${prompt_pref}:%~ \$(__gitprompt)%{$reset_color%}"
+function venvprompt {
+  [ -z $VIRTUAL_ENV ] || echo "[$(basename "$VIRTUAL_ENV")]"
+}
+
+export THE_PROMPT="\$(venvprompt)${prompt_pref}:%~ \$(__gitprompt)%{$reset_color%}"
 
 zle -N zle-line-init
 zle -N zle-keymap-select
 
 function flippo {
   # Make it portable
-  case $OS in 
+  case $OS in
     FreeBSD|Linux|Darwin)
       local delay=0.5
       ;;
@@ -95,6 +128,33 @@ function flippo {
     'ﾉ(°-°ﾉ)     ┻━┻  ' \
     '-°ﾉ)        ┻━┻  ' \
     '            ┻━┻  ')
+  for i in ${frames[@]}; do
+    echo -en $reset
+    echo -n $i
+    sleep $delay
+  done
+  echo
+}
+
+#FIXME: dry
+function ohyeah {
+  # Make it portable
+  case $OS in
+    FreeBSD|Linux|Darwin)
+      local delay=0.5
+      ;;
+    *)
+      local delay=1
+      ;;
+  esac
+  local reset="\r\e[K"
+  local frames=( \
+    '( •_•)        ' \
+    '( •_•)        ' \
+    '( •_•)>⌐■-■   ' \
+    '( •_•⌐■-■     ' \
+    '(⌐■_■)        ' \
+    '(⌐■_■) -ohyeah')
   for i in ${frames[@]}; do
     echo -en $reset
     echo -n $i
@@ -120,7 +180,18 @@ function dockme {
       ;;
   esac
   docker run --rm -it $docker_image $shell
-} 
+}
+
+function dockill {
+  for i in $(docker ps -q); do
+    docker kill $i
+  done
+}
+
+function vidiff {
+  vi $(git diff $@ --name-only)
+}
+
 #if [ "$OS" = "Darwin" ] && which docker-machine > /dev/null 2>&1; then
 #  __docker_machine_name=default
 #  __docker_machine_status=$(docker-machine status ${__docker_machine_name} 2>&1)
