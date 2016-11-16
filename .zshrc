@@ -1,6 +1,6 @@
 export OS=$(uname)
 
-export PATH=$PATH:/usr/local/sbin:$HOME/bin/mail:$HOME/.local/bin
+export PATH=$HOME/bin:$PATH:/usr/local/sbin:$HOME/bin/mail:$HOME/.local/bin:$HOME/.cargo/bin
 export EDITOR=vim
 export PAGER=less
 export GPG_TTY=$(tty)
@@ -18,6 +18,12 @@ alias zource='source ~/.zshrc'
 case $OS in
   FreeBSD)
     alias make='gmake'
+    ;;
+esac
+
+case $TERM in
+  st-256color)
+    export TERM=xterm-256color
     ;;
 esac
 
