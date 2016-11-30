@@ -20,8 +20,11 @@ bindkey "^r" history-incremental-search-backward
 bindkey -M vicmd "/" history-incremental-search-backward
 autoload -U colors && colors
 alias zource='source ~/.zshrc'
+alias be='bundle exec'
 # what the fuck ansible.
 export ANSIBLE_NOCOWS=1
+
+eval "$(rbenv init -)"
 
 case $OS in
   FreeBSD)
