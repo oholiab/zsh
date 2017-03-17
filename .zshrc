@@ -25,6 +25,10 @@ alias lock='open -a /System/Library/Frameworks/ScreenSaver.framework/Versions/A/
 # what the fuck ansible.
 export ANSIBLE_NOCOWS=1
 
+if [ -d "$HOME/.zsh/d" ]; then
+  source ~/.zsh/d/*
+fi
+
 eval "$(rbenv init -)"
 
 case $OS in
