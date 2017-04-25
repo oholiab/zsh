@@ -18,6 +18,7 @@ bindkey -v
 #bindkey "^?" describe-key-briefly
 bindkey "^r" history-incremental-search-backward
 bindkey -M vicmd "/" history-incremental-search-backward
+bindkey "^?" backward-delete-char
 autoload -U colors && colors
 alias zource='source ~/.zshrc'
 alias be='bundle exec'
