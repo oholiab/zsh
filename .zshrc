@@ -39,6 +39,9 @@ case $OS in
   Darwin)
     alias ls='ls -G'
     ;;
+  Linux)
+    alias ls='ls --color'
+    ;;
 esac
 
 case $TERM in
