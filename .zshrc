@@ -30,7 +30,7 @@ if [ -d "$HOME/.zsh/d" ]; then
   source ~/.zsh/d/*
 fi
 
-eval "$(rbenv init -)"
+which rbenv >/dev/null && eval "$(rbenv init -)"
 
 case $OS in
   FreeBSD)
