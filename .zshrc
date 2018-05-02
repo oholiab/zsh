@@ -3,7 +3,7 @@ autoload -Uz compinit && compinit
 export OS=$(uname)
 
 export PATH=$HOME/bin:$PATH:/usr/local/sbin:$HOME/bin/mail:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.gem/ruby/2.0.0/bin
-export EDITOR=vim
+export EDITOR="nvim -u ~/.vimrc"
 export PAGER=less
 export GPG_TTY=$(tty)
 export GPG_AGENT_INFO=$HOME/.gnupg/S.gpg-agent
@@ -11,7 +11,9 @@ export GOPATH=$HOME/golang
 export GOBIN=$GOPATH/bin
 export RUSTBIN=~/.cargo/bin
 export PATH=$PATH:$GOBIN:$RUSTBIN
-alias vi='vim'
+alias vi='nvim -u ~/.vimrc'
+alias vim='nvim -u ~/.vimrc'
+alias emacs='emacsclient'
 export KEYTIMEOUT=1
 set -o vi
 bindkey -v
