@@ -13,7 +13,6 @@ export RUSTBIN=~/.cargo/bin
 export PATH=$PATH:$GOBIN:$RUSTBIN
 alias vi='nvim -u ~/.vimrc'
 alias vim='nvim -u ~/.vimrc'
-alias emacs='emacsclient'
 export KEYTIMEOUT=1
 set -o vi
 bindkey -v
@@ -24,7 +23,6 @@ bindkey "^?" backward-delete-char
 autoload -U colors && colors
 alias zource='source ~/.zshrc'
 alias be='bundle exec'
-alias lock='open -a /System/Library/Frameworks/ScreenSaver.framework/Versions/A/Resources/ScreenSaverEngine.app'
 # what the fuck ansible.
 export ANSIBLE_NOCOWS=1
 
@@ -102,7 +100,9 @@ __ins_prompt="%F{$PCOL}> %{$reset_color%}"
 __cmd_prompt="%F{$PCOL}: %{$reset_color%}"
 
 function zle-line-init zle-keymap-select {
-  PROMPT="$THE_PROMPT${${KEYMAP/vicmd/$__cmd_prompt}/(main|viins)/$__ins_prompt}"
+  PROMPT=\
+"$THE_PROMPT
+${${KEYMAP/vicmd/$__cmd_prompt}/(main|viins)/$__ins_prompt}%{$reset_color%}"
   zle reset-prompt
 }
 
