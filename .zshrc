@@ -27,7 +27,9 @@ alias be='bundle exec'
 export ANSIBLE_NOCOWS=1
 
 if [ -d "$HOME/.zsh/d" ]; then
-  source ~/.zsh/d/*
+  for i in $HOME/.zsh/d/*; do
+    source "$i"
+  done
 fi
 
 [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
