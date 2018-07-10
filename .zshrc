@@ -217,3 +217,15 @@ function vidiff {
 #  fi
 #  eval $(docker-machine env ${__docker_machine_name})
 #fi
+
+if which fzf 2>&1 >/dev/null; then
+  function fh {
+    print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf-tmux +s --tac | sed 's/ *[0-9]* *//')
+  }
+  function fman {
+    man -k $1 | fzf --preview 'man $(echo {} | cut -f2 -d "(" | cut -c1) $(echo {} | cut -f1 -d"(")'
+  }
+  function flpass {
+    lpass ls >/dev/null && lpass show -c --password $(lpass ls | fzf | awk '{print $(NF)}' | sed 's/]//g')
+  }
+fi
