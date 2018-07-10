@@ -32,6 +32,9 @@ if [ -d "$HOME/.zsh/d" ]; then
   source ~/.zsh/d/*
 fi
 
+[ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
+[ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
+
 which rbenv >/dev/null && eval "$(rbenv init -)"
 
 case $OS in
@@ -217,3 +220,10 @@ function vidiff {
 #  fi
 #  eval $(docker-machine env ${__docker_machine_name})
 #fi
+
+if which fzf >&2; then
+  function doc {
+    read result < <(man -k "$1" | fzf)
+    echo "${result}" balls
+  }
+fi
