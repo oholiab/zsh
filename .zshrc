@@ -236,3 +236,12 @@ if which fzf 2>&1 >/dev/null; then
     lpass ls >/dev/null && lpass show -c --password $(lpass ls | fzf | awk '{print $(NF)}' | sed 's/]//g')
   }
 fi
+
+function subshell-current-line {
+    BUFFER="\$($BUFFER)"
+    zle beginning-of-line
+    zle -K viins
+}
+zle -N subshell-current-line
+
+bindkey -M vicmd 'S' subshell-current-line
