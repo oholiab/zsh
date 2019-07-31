@@ -3,7 +3,6 @@ autoload -Uz compinit && compinit
 export OS=$(uname)
 
 export PATH=$HOME/bin:$PATH:/usr/local/sbin:$HOME/bin/mail:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.gem/ruby/2.0.0/bin
-export EDITOR="nvim -u ~/.vimrc"
 export PAGER=less
 export GPG_TTY=$(tty)
 export GPG_AGENT_INFO=$HOME/.gnupg/S.gpg-agent
@@ -11,8 +10,6 @@ export GOPATH=$HOME/golang
 export GOBIN=$GOPATH/bin
 export RUSTBIN=~/.cargo/bin
 export PATH=$PATH:$GOBIN:$RUSTBIN
-alias vi='nvim -u ~/.vimrc'
-alias vim='nvim -u ~/.vimrc'
 export KEYTIMEOUT=1
 set -o vi
 bindkey -v
@@ -23,6 +20,7 @@ bindkey "^?" backward-delete-char
 autoload -U colors && colors
 alias zource='source ~/.zshrc'
 alias be='bundle exec'
+alias emasc='emacs'
 # what the fuck ansible.
 export ANSIBLE_NOCOWS=1
 
@@ -213,6 +211,10 @@ function vidiff {
   vi $(git diff $@ --name-only)
 }
 
+function tl {
+  cd $(git rev-parse --show-toplevel)
+}
+
 #if [ "$OS" = "Darwin" ] && which docker-machine > /dev/null 2>&1; then
 #  __docker_machine_name=default
 #  __docker_machine_status=$(docker-machine status ${__docker_machine_name} 2>&1)
@@ -234,6 +236,9 @@ if which fzf 2>&1 >/dev/null; then
   }
   function flpass {
     lpass ls >/dev/null && lpass show -c --password $(lpass ls | fzf | awk '{print $(NF)}' | sed 's/]//g')
+  }
+  function fcat {
+    ls $1 | fzf --preview "[ -d $1/{} ] && tree $1 || cat $1/{}"
   }
 fi
 
