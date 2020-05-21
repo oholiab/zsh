@@ -20,6 +20,7 @@ bindkey -M vicmd "/" history-incremental-search-backward
 bindkey "^?" backward-delete-char
 autoload -U colors && colors
 alias zource='source ~/.zshrc'
+alias sa='eval `ssh-agent` && ssh-add'
 alias be='bundle exec'
 alias emasc='emacs'
 # what the fuck ansible.
