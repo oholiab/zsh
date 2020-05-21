@@ -11,6 +11,7 @@ export GOBIN=$GOPATH/bin
 export RUSTBIN=~/.cargo/bin
 export PATH=$PATH:$GOBIN:$RUSTBIN
 export KEYTIMEOUT=1
+export LPASS_CLIPBOARD_COMMAND=wl-copy
 set -o vi
 bindkey -v
 #bindkey "^?" describe-key-briefly
