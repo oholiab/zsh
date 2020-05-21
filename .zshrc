@@ -183,50 +183,9 @@ function ohyeah {
   echo
 }
 
-function dockme {
-  local distro=$1
-  local docker_image=""
-  local shell="/bin/bash"
-  case $distro in
-    void)
-      docker_image="voidlinux/voidlinux"
-      ;;
-    ubuntu)
-      docker_image="ubuntu:trusty"
-      ;;
-    alpine)
-      docker_image="alpine:latest"
-      shell="/bin/ash"
-      ;;
-  esac
-  docker run --rm -it $docker_image $shell
-}
-
-function dockill {
-  for i in $(docker ps -q); do
-    docker kill $i
-  done
-}
-
-function vidiff {
-  vi $(git diff $@ --name-only)
-}
-
 function tl {
   cd $(git rev-parse --show-toplevel)
 }
-
-#if [ "$OS" = "Darwin" ] && which docker-machine > /dev/null 2>&1; then
-#  __docker_machine_name=default
-#  __docker_machine_status=$(docker-machine status ${__docker_machine_name} 2>&1)
-#  if [ $? -ne 0 ]; then
-#    docker-machine create ${__docker_machine_name} -d virtualbox
-#  fi
-#  if [ ${__docker_machine_status} = "Stopped" ]; then
-#    docker-machine start ${__docker_machine_name}
-#  fi
-#  eval $(docker-machine env ${__docker_machine_name})
-#fi
 
 if which fzf 2>&1 >/dev/null; then
   function fh {
