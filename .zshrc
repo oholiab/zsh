@@ -19,6 +19,7 @@ bindkey "^r" history-incremental-search-backward
 bindkey -M vicmd "/" history-incremental-search-backward
 bindkey "^?" backward-delete-char
 autoload -U colors && colors
+alias emacs='emacs --no-window-system'
 alias zource='source ~/.zshrc'
 alias sa='eval `ssh-agent` && ssh-add'
 alias be='bundle exec'
