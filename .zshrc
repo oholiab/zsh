@@ -2,7 +2,8 @@ fpath=(~/.zsh/completions $fpath)
 autoload -Uz compinit && compinit
 export OS=$(uname)
 
-export PATH=$HOME/bin:$PATH:/usr/local/sbin:$HOME/bin/mail:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.gem/ruby/2.0.0/bin
+export PATH=/usr/local/opt/python@3.9/libexec/bin:$HOME/bin:$PATH:/usr/local/sbin:$HOME/bin/mail:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.gem/ruby/2.0.0/bin
+
 export PAGER=less
 export GPG_TTY=$(tty)
 export GPG_AGENT_INFO=$HOME/.gnupg/S.gpg-agent
@@ -11,7 +12,6 @@ export GOBIN=$GOPATH/bin
 export RUSTBIN=~/.cargo/bin
 export PATH=$PATH:$GOBIN:$RUSTBIN
 export KEYTIMEOUT=1
-export LPASS_CLIPBOARD_COMMAND=wl-copy
 set -o vi
 bindkey -v
 #bindkey "^?" describe-key-briefly
@@ -19,13 +19,17 @@ bindkey "^r" history-incremental-search-backward
 bindkey -M vicmd "/" history-incremental-search-backward
 bindkey "^?" backward-delete-char
 autoload -U colors && colors
-alias emacs='emacs --no-window-system'
 alias zource='source ~/.zshrc'
-alias sa='eval `ssh-agent` && ssh-add'
 alias be='bundle exec'
 alias emasc='emacs'
+alias vi=nvim
+if [ -f "$(which lsd)" ]; then
+  alias ls=lsd
+fi
+export EDITOR=nvim
 # what the fuck ansible.
 export ANSIBLE_NOCOWS=1
+export HOMEBREW_NO_AUTO_UPDATE=1
 
 if [ -d "$HOME/.zsh/d" ]; then
   for i in $HOME/.zsh/d/*; do
@@ -185,6 +189,10 @@ function ohyeah {
   echo
 }
 
+function vidiff {
+  vi $(git diff $@ --name-only)
+}
+
 function tl {
   cd $(git rev-parse --show-toplevel)
 }
@@ -201,6 +209,9 @@ if which fzf 2>&1 >/dev/null; then
   }
   function fcat {
     ls $1 | fzf --preview "[ -d $1/{} ] && tree $1 || cat $1/{}"
+  }
+  function fpr {
+    gh pr view -R $1 --web $(gh pr list -R $1 | fzf | cut -f1)
   }
 fi
 
