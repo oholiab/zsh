@@ -1,5 +1,7 @@
 fpath=(~/.zsh/completions $fpath)
 autoload -Uz compinit && compinit
+autoload -U edit-command-line
+zle -N edit-command-line
 export OS=$(uname)
 
 export PATH=/usr/local/opt/python@3.9/libexec/bin:$HOME/bin:$PATH:/usr/local/sbin:$HOME/bin/mail:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.gem/ruby/2.0.0/bin
@@ -17,6 +19,7 @@ bindkey -v
 #bindkey "^?" describe-key-briefly
 bindkey "^r" history-incremental-search-backward
 bindkey -M vicmd "/" history-incremental-search-backward
+bindkey -M vicmd E edit-command-line
 bindkey "^?" backward-delete-char
 autoload -U colors && colors
 alias zource='source ~/.zshrc'
