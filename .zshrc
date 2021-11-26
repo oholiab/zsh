@@ -25,7 +25,9 @@ autoload -U colors && colors
 alias zource='source ~/.zshrc'
 alias be='bundle exec'
 alias emasc='emacs'
-alias vi=nvim
+if which nvim > /dev/null; then
+  alias vi=nvim
+fi
 if [ -f "$(which lsd)" ]; then
   alias ls=lsd
 fi
