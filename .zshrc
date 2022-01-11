@@ -1,3 +1,4 @@
+[[ "$TERM" = "vt220" ]] && return
 fpath=(~/.zsh/completions $fpath)
 autoload -Uz compinit && compinit
 autoload -U edit-command-line
