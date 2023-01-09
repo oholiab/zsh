@@ -13,7 +13,8 @@ export GPG_AGENT_INFO=$HOME/.gnupg/S.gpg-agent
 export GOPATH=$HOME/golang
 export GOBIN=$GOPATH/bin
 export RUSTBIN=~/.cargo/bin
-export PATH=$PATH:$GOBIN:$RUSTBIN
+export NODEBIN=~/.npm-prefix/bin
+export PATH=$PATH:$GOBIN:$RUSTBIN:$NODEBIN
 export KEYTIMEOUT=1
 set -o vi
 bindkey -v
