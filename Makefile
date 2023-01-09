@@ -27,3 +27,6 @@ completions/git-completion.bash: tmp completions
 
 ../.zshrc:
 	cd ../ && ln -s .zsh/.zshrc
+
+../.tmux.conf:
+	cd ../ && ln -s .zsh/.tmux.conf
