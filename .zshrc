@@ -5,7 +5,8 @@ autoload -U edit-command-line
 zle -N edit-command-line
 export OS=$(uname)
 
-export PATH=/usr/local/opt/python@3.9/libexec/bin:$HOME/bin:$PATH:/usr/local/sbin:$HOME/bin/mail:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.gem/ruby/2.0.0/bin
+export PLAN9=$HOME/plan9port
+export PATH=/usr/local/opt/python@3.9/libexec/bin:$HOME/bin:$PATH:/usr/local/sbin:$HOME/bin/mail:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.gem/ruby/2.0.0/bin:$PLAN9/bin
 
 export PAGER=less
 export GPG_TTY=$(tty)
