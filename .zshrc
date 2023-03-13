@@ -1,5 +1,6 @@
 [[ "$TERM" = "vt220" ]] && return
 setopt SH_WORD_SPLIT
+alias sa='eval `ssh-agent` && ssh-add'
 fpath=(~/.zsh/completions $fpath)
 autoload -Uz compinit && compinit
 autoload -U edit-command-line
@@ -28,7 +29,6 @@ bindkey "^?" backward-delete-char
 autoload -U colors && colors
 alias zource='source ~/.zshrc'
 alias be='bundle exec'
-alias emasc='emacs'
 if which nvim > /dev/null; then
   alias vi=nvim
 fi
@@ -36,6 +36,8 @@ if [ -f "$(which lsd)" ]; then
   alias ls=lsd
 fi
 export EDITOR=nvim
+alias vi=$EDITOR
+alias view="$EDITOR -R"
 # what the fuck ansible.
 export ANSIBLE_NOCOWS=1
 export HOMEBREW_NO_AUTO_UPDATE=1
@@ -236,3 +238,4 @@ function subshell-current-line {
 zle -N subshell-current-line
 
 bindkey -M vicmd 'S' subshell-current-line
+
