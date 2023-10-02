@@ -1,4 +1,5 @@
 [[ "$TERM" = "vt220" ]] && return
+setopt SH_WORD_SPLIT
 fpath=(~/.zsh/completions $fpath)
 autoload -Uz compinit && compinit
 autoload -U edit-command-line
@@ -199,6 +200,10 @@ function ohyeah {
 
 function vidiff {
   vi $(git diff $@ --name-only)
+}
+
+function src {
+  $EDITOR $(which $@)
 }
 
 function tl {
