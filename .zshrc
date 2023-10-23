@@ -222,6 +222,9 @@ if which fzf 2>&1 >/dev/null; then
   function flpass {
     lpass ls >/dev/null && lpass show -c --password $(lpass ls | fzf | awk '{print $(NF)}' | sed 's/]//g')
   }
+  function fop {
+    op item get --fields label=password $(op item list | fzf | cut -f1 -d' ') | wl-copy
+  }
   function fcat {
     ls $1 | fzf --preview "[ -d $1/{} ] && tree $1 || cat $1/{}"
   }
