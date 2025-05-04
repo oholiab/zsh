@@ -7,10 +7,12 @@ autoload -U edit-command-line
 zle -N edit-command-line
 export OS=$(uname)
 
+export MPD_HOST=$HOME/.local/run/mpd/mpd.sock
 export PLAN9=$HOME/plan9port
 export PATH=/usr/local/opt/python@3.9/libexec/bin:$HOME/bin:$PATH:/usr/local/sbin:$HOME/bin/mail:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.gem/ruby/2.0.0/bin:$PLAN9/bin:$HOME/.npm-packages/bin
 
 export PAGER=less
+export MANPAGER='nvim +Man!'
 export GPG_TTY=$(tty)
 export GPG_AGENT_INFO=$HOME/.gnupg/S.gpg-agent
 export GOPATH=$HOME/golang
@@ -29,6 +31,8 @@ bindkey "^?" backward-delete-char
 autoload -U colors && colors
 alias zource='source ~/.zshrc'
 alias be='bundle exec'
+alias tmux="tmux -2"
+alias ncmpcpp="ncmpcpp -s playlist -S media_library"
 if which nvim > /dev/null; then
   alias vi=nvim
 fi
@@ -85,8 +89,8 @@ man() {
     man "$@"
 }
 
-HISTSIZE=1000
-SAVEHIST=1000
+HISTSIZE=10000
+SAVEHIST=10000
 HISTFILE=~/.history
 
 setopt INC_APPEND_HISTORY
@@ -223,7 +227,7 @@ if which fzf 2>&1 >/dev/null; then
     lpass ls >/dev/null && lpass show -c --password $(lpass ls | fzf | awk '{print $(NF)}' | sed 's/]//g')
   }
   function fop {
-    op item get --fields label=password $(op item list | fzf | cut -f1 -d' ') | wl-copy
+    op item get --reveal --fields label=password $(op item list | fzf | cut -f1 -d' ') | wl-copy
   }
   function fcat {
     ls $1 | fzf --preview "[ -d $1/{} ] && tree $1 || cat $1/{}"
@@ -231,6 +235,13 @@ if which fzf 2>&1 >/dev/null; then
   function fpr {
     gh pr view -R $1 --web $(gh pr list -R $1 | fzf | cut -f1)
   }
+  function frg {
+    rg --color=always --line-number --no-heading --smart-case "${*:-}" \
+    | fzf -d':' --ansi \
+      --preview "batcat -p --color=always {1} --highlight-line {2}" \
+      --preview-window ~8,+{2}-5 \
+    | awk -F':' '{print $1}'
+}
 fi
 
 function subshell-current-line {
@@ -242,3 +253,6 @@ zle -N subshell-current-line
 
 bindkey -M vicmd 'S' subshell-current-line
 
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
