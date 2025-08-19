@@ -7,11 +7,13 @@ autoload -Uz compinit && compinit
 autoload -U edit-command-line
 zle -N edit-command-line
 export OS=$(uname)
+export HOSTNAME=$(hostname)
 
 export MPD_HOST=$HOME/.local/run/mpd/mpd.sock
 export PLAN9=$HOME/plan9port
-export PATH=/usr/local/opt/python@3.9/libexec/bin:$HOME/bin:$PATH:/usr/local/sbin:$HOME/bin/mail:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.gem/ruby/2.0.0/bin:$PLAN9/bin:$HOME/.npm-packages/bin
+export PATH=/usr/local/opt/python@3.9/libexec/bin:$HOME/bin:$PATH:/usr/local/sbin:$HOME/bin/mail:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.gem/ruby/2.0.0/bin:$PLAN9/bin:$HOME/.npm-packages/bin:/opt/homebrew/bin
 
+export AA_ARBITRATOR_SOCK=/tmp/$USER-aa-arbitrator.sock
 export PAGER=less
 export MANPAGER='nvim +Man!'
 export GPG_TTY=$(tty)
@@ -25,6 +27,14 @@ export KEYTIMEOUT=1
 set -o vi
 bindkey -v
 #bindkey "^?" describe-key-briefly
+HISTSIZE=10000000
+SAVEHIST=10000000
+HISTORY_IGNORE="(ls|cd|pwd|exit|cd)*"
+setopt EXTENDED_HISTORY      # Write the history file in the ':start:elapsed;command' format.
+setopt HIST_IGNORE_DUPS      # Do not record an event that was just recorded again.
+setopt HIST_IGNORE_ALL_DUPS  # Delete an old recorded event if a new event is a duplicate.
+setopt HIST_IGNORE_SPACE     # Do not record an event starting with a space.
+setopt HIST_SAVE_NO_DUPS     # Do not write a duplicate event to the history file.
 bindkey "^r" history-incremental-search-backward
 bindkey -M vicmd "/" history-incremental-search-backward
 bindkey -M vicmd E edit-command-line
@@ -53,10 +63,14 @@ if [ -d "$HOME/.zsh/d" ]; then
   done
 fi
 
+
+
 [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
 [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
 [ -f /usr/local/opt/fzf/shell/key-bindings.zsh ] && source /usr/local/opt/fzf/shell/key-bindings.zsh
 [ -f /usr/local/opt/fzf/shell/completion.zsh ] && source /usr/local/opt/fzf/shell/completion.zsh
+[ -f /opt/homebrew/opt/fzf/shell/completion.zsh ] && source /opt/homebrew/opt/fzf/shell/completion.zsh
+[ -f /opt/homebrew/opt/fzf/shell/key-bindings.zsh ] && source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
 
 which rbenv >/dev/null && eval "$(rbenv init -)"
 
@@ -149,6 +163,10 @@ function venvprompt {
 }
 
 export THE_PROMPT="\$(venvprompt)${prompt_pref}:%~ \$(__gitprompt)%{$reset_color%}"
+
+function precmd {
+  print -n "\e]0;${HOSTNAME}:${PWD}\a"
+}
 
 zle -N zle-line-init
 zle -N zle-keymap-select
