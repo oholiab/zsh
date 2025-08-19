@@ -1,6 +1,7 @@
 [[ "$TERM" = "vt220" ]] && return
 setopt SH_WORD_SPLIT
 alias sa='eval `ssh-agent` && ssh-add'
+alias log='vi log/$(date +"%Y-%m-%d") --cmd ":set ft=markdown" +":lua vim.g.cmptoggle = not vim.g.cmptoggle"'
 fpath=(~/.zsh/completions $fpath)
 autoload -Uz compinit && compinit
 autoload -U edit-command-line
