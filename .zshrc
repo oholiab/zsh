@@ -1,6 +1,7 @@
 [[ "$TERM" = "vt220" ]] && return
 setopt SH_WORD_SPLIT
 alias sa='eval `ssh-agent` && ssh-add'
+alias man='qman'
 alias log='vi log/$(date +"%Y-%m-%d") --cmd ":set ft=markdown" +":lua vim.g.cmptoggle = not vim.g.cmptoggle"'
 fpath=(~/.zsh/completions $fpath)
 autoload -Uz compinit && compinit
@@ -9,19 +10,15 @@ zle -N edit-command-line
 export OS=$(uname)
 export HOSTNAME=$(hostname)
 
-export PLAN9=$HOME/plan9port
-export PATH=/usr/local/opt/python@3.9/libexec/bin:$HOME/bin:$PATH:/usr/local/sbin:$HOME/bin/mail:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.gem/ruby/2.0.0/bin:$PLAN9/bin:$HOME/.npm-packages/bin:/opt/homebrew/bin
-
-export AA_ARBITRATOR_SOCK=/tmp/$USER-aa-arbitrator.sock
-export PAGER=less
-export MANPAGER='nvim +Man!'
-export GPG_TTY=$(tty)
-export GPG_AGENT_INFO=$HOME/.gnupg/S.gpg-agent
+export PATH=$HOME/bin:$HOME/.local/bin:$PATH:/usr/local/sbin:$HOME/.cargo/bin:/opt/homebrew/bin
 export GOPATH=$HOME/golang
 export GOBIN=$GOPATH/bin
 export RUSTBIN=~/.cargo/bin
 export NODEBIN=~/.npm-prefix/bin
 export PATH=$PATH:$GOBIN:$RUSTBIN:$NODEBIN
+
+export PAGER=less
+export MANPAGER='qman'
 export KEYTIMEOUT=1
 set -o vi
 bindkey -v
@@ -46,23 +43,14 @@ alias ncmpcpp="ncmpcpp -s playlist -S media_library"
 if which nvim > /dev/null; then
   alias vi=nvim
 fi
-if [ -f "$(which lsd)" ]; then
-  alias ls=lsd
-fi
 export EDITOR=ki
 alias vi=$EDITOR
 alias view="$EDITOR -R"
-# what the fuck ansible.
-export ANSIBLE_NOCOWS=1
-export HOMEBREW_NO_AUTO_UPDATE=1
-
 if [ -d "$HOME/.zsh/d" ]; then
   for i in $HOME/.zsh/d/*; do
     source "$i"
   done
 fi
-
-
 
 [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
 [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
@@ -86,32 +74,19 @@ case $OS in
 esac
 
 case $TERM in
+  xterm-ghostty)
+    export TERM=xterm-256color
+    ;;
   st-256color)
     export TERM=xterm-256color
     ;;
 esac
-
-man() {
-  env \
-    LESS_TERMCAP_mb=$(printf "\e[1;31m") \
-    LESS_TERMCAP_md=$(printf "\e[1;31m") \
-    LESS_TERMCAP_me=$(printf "\e[0m") \
-    LESS_TERMCAP_se=$(printf "\e[0m") \
-    LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
-    LESS_TERMCAP_ue=$(printf "\e[0m") \
-    LESS_TERMCAP_us=$(printf "\e[1;32m") \
-    man "$@"
-}
 
 HISTSIZE=10000
 SAVEHIST=10000
 HISTFILE=~/.history
 
 setopt INC_APPEND_HISTORY
-
-if which thefuck 2>&1 >/dev/null; then
-  eval $(thefuck --alias)
-fi
 
 __gitprompt_prefix="["
 __gitprompt_suffix="]"
@@ -241,17 +216,11 @@ if which fzf 2>&1 >/dev/null; then
   function fman {
     man -k $1 | fzf --preview 'man $(echo {} | cut -f2 -d "(" | cut -c1) $(echo {} | cut -f1 -d"(")'
   }
-  function flpass {
-    lpass ls >/dev/null && lpass show -c --password $(lpass ls | fzf | awk '{print $(NF)}' | sed 's/]//g')
-  }
   function fop {
     op item get --reveal --fields label=password $(op item list | fzf | cut -f1 -d' ') | wl-copy
   }
   function fcat {
     ls $1 | fzf --preview "[ -d $1/{} ] && tree $1 || cat $1/{}"
-  }
-  function fpr {
-    gh pr view -R $1 --web $(gh pr list -R $1 | fzf | cut -f1)
   }
   function frg {
     rg --color=always --line-number --no-heading --smart-case "${*:-}" \
@@ -286,4 +255,3 @@ export PATH="$PATH:$HOME/.rvm/bin:$HOME/.cargo/bin"
   }
   zle -N _ki_readline
   bindkey '^E' _ki_readline
-
