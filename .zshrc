@@ -49,7 +49,7 @@ fi
 if [ -f "$(which lsd)" ]; then
   alias ls=lsd
 fi
-export EDITOR=nvim
+export EDITOR=ki
 alias vi=$EDITOR
 alias view="$EDITOR -R"
 # what the fuck ansible.
@@ -273,4 +273,17 @@ bindkey -M vicmd 'S' subshell-current-line
 
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
+export PATH="$PATH:$HOME/.rvm/bin:$HOME/.cargo/bin"
+
+ function _ki_readline() {
+    local result
+    result=$(ki_readline "$BUFFER")
+    if [[ $? -eq 0 ]]; then
+      BUFFER=$result
+      CURSOR=${#BUFFER}
+      zle reset-prompt
+    fi
+  }
+  zle -N _ki_readline
+  bindkey '^E' _ki_readline
+
